@@ -22,3 +22,23 @@ export const createUser = (req: Request, res: Response) => {
     }))
     .catch((err) => res.status(500).send(err));
 };
+
+export const updateUser = (req: Request, res: Response) => {
+  Users.findByIdAndUpdate(req.params._id, req.body, { new: true, runValidators: true })
+    .then((user) => res.status(200).send({
+      name: user?.name,
+      about: user?.about,
+      avatar: user?.avatar,
+    }))
+    .catch((err) => res.status(500).send(err));
+};
+
+export const updateAvatar = (req: Request, res: Response) => {
+  Users.findByIdAndUpdate(req.params._id, req.body, { new: true, runValidators: true })
+    .then((user) => res.status(200).send({
+      name: user?.name,
+      about: user?.about,
+      avatar: user?.avatar,
+    }))
+    .catch((err) => res.status(500).send(err));
+};

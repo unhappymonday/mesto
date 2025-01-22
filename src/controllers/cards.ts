@@ -9,7 +9,7 @@ export const getAllCards = (req: Request, res: Response) => {
 };
 
 export const getCardById = (req: Request, res: Response) => {
-  Cards.findById(req.params.id)
+  Cards.findById(req.params._id)
     .then((card) => res.status(200).send(card))
     .catch((err) => res.status(500).send(err));
 };

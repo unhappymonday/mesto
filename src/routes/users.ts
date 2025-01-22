@@ -6,7 +6,7 @@ import {
 const router = Router();
 
 router.get('/', getAllUsers);
-router.get('/', getUserById);
+router.get('/:userId', getUserById);
 router.post('/', createUser);
 router.patch('/me', updateUser);
 router.patch('/me/avatar', updateAvatar);

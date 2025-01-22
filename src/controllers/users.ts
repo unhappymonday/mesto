@@ -8,12 +8,8 @@ export const getAllUsers = (req: Request, res: Response) => {
 };
 
 export const getUserById = (req: Request, res: Response) => {
-  Users.findById(req.params.id)
-    .then((user) => res.status(200).send({
-      name: user?.name,
-      about: user?.about,
-      avatar: user?.avatar,
-    }))
+  Users.findById(req.params._id)
+    .then((user) => res.status(200).send(user))
     .catch((err) => res.status(500).send(err));
 };
 

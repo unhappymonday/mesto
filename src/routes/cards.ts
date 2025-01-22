@@ -6,7 +6,7 @@ import {
 const router = Router();
 
 router.get('/', getAllCards);
-router.get('/', getCardById);
+router.get('/:cardId', getCardById);
 router.post('/', createCard);
 router.put('/:cardId/likes', createCardLike);
 router.delete('/:cardId/likes', deleteCardLike);

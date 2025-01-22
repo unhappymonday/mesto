@@ -15,6 +15,10 @@ export const getUserById = (req: Request, res: Response) => {
 
 export const createUser = (req: Request, res: Response) => {
   Users.create(req.body)
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(200).send({
+      name: user.name,
+      about: user.about,
+      avatar: user.avatar,
+    }))
     .catch((err) => res.status(500).send(err));
 };

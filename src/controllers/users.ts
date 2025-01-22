@@ -1,15 +1,19 @@
 import { Request, Response } from 'express';
 import Users from '../models/users';
 
-export const getAllUsers = (res: Response) => {
-  Users.find()
-    .then((users) => res.status(200).send(users))
+export const getAllUsers = (req: Request, res: Response) => {
+  Users.find({})
+    .then((users) => res.status(200).send({ data: users }))
     .catch((err) => res.status(500).send(err));
 };
 
 export const getUserById = (req: Request, res: Response) => {
   Users.findById(req.params.id)
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(200).send({
+      name: user?.name,
+      about: user?.about,
+      avatar: user?.avatar,
+    }))
     .catch((err) => res.status(500).send(err));
 };
 

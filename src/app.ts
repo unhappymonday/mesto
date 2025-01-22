@@ -3,7 +3,7 @@ import mongoose from 'mongoose';
 import userRouter from './routes/users';
 import cardRouter from './routes/cards';
 
-const { PORT = 3000, BASE_PATH } = process.env;
+const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(express.json());
@@ -18,11 +18,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
   next();
 });
-
 app.use('/users', userRouter);
 app.use('/cards', cardRouter);
 
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-  console.log(`Base path: ${BASE_PATH}`);
-});
+app.listen(PORT);

@@ -1,8 +1,9 @@
 import { Request, Response } from 'express';
 import Cards from '../models/cards';
 
-export const getAllCards = (res: Response) => {
-  Cards.find()
+export const getAllCards = (req: Request, res: Response) => {
+  Cards.find({})
+    .populate('owner')
     .then((cards) => res.status(200).send(cards))
     .catch((err) => res.status(500).send(err));
 };
@@ -14,8 +15,9 @@ export const getCardById = (req: Request, res: Response) => {
 };
 
 export const createCard = (req: Request, res: Response) => {
-  console.log((req as any).user._id);
-  Cards.create(req.body)
+  const { name, link } = req.body;
+
+  Cards.create({ name, link, owner: (req as any).user._id })
     .then((card) => res.status(200).send({
       name: card.name,
       link: card.link,

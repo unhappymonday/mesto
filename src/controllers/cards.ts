@@ -1,11 +1,16 @@
 import { NextFunction, Request, Response } from "express";
 import Cards from "../models/cards";
+import NotFoundError from "../errors/not-found-error";
 
-export const getAllCards = (req: Request, res: Response) => {
+export const getAllCards = (
+  _req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   Cards.find({})
     .populate("owner")
     .then((cards) => res.status(200).send(cards))
-    .catch((err) => res.status(500).send(err));
+    .catch(next);
 };
 
 export const getCardById = (
@@ -14,7 +19,12 @@ export const getCardById = (
   _next: NextFunction
 ) => {
   Cards.findById(req.params.cardId)
-    .then((card) => res.status(200).send(card))
+    .then((card) => {
+      if (!card) {
+        throw new NotFoundError("Карточка не найдена");
+      }
+      res.status(200).send(card);
+    })
     .catch((err) => res.status(500).send(err));
 };
 
@@ -31,22 +41,40 @@ export const createCard = (req: Request, res: Response) => {
     .catch((err) => res.status(500).send(err));
 };
 
-export const createCardLike = (req: Request, res: Response) => {
+export const createCardLike = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   Cards.findByIdAndUpdate(
     req.params.cardId,
     { $addToSet: { likes: (req as any).user._id } },
     { new: true }
   )
-    .then((card) => res.status(200).send(card))
-    .catch((err) => res.status(500).send(err));
+    .then((card) => {
+      if (!card) {
+        throw new NotFoundError("Карточка не найдена");
+      }
+      res.status(200).send(card);
+    })
+    .catch(next);
 };
 
-export const deleteCardLike = (req: Request, res: Response) => {
+export const deleteCardLike = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   Cards.findByIdAndUpdate(
     req.params.cardId,
     { $pull: { likes: (req as any).user._id } },
     { new: true }
   )
-    .then((card) => res.status(200).send(card))
-    .catch((err) => res.status(500).send(err));
+    .then((card) => {
+      if (!card) {
+        throw new NotFoundError("Карточка не найдена");
+      }
+      res.status(200).send(card);
+    })
+    .catch(next);
 };

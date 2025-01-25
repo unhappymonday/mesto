@@ -21,7 +21,7 @@ export const getUserById = (
   Users.findById(req.params.userId)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Пользователь не найден");
+        throw new NotFoundError("Пользователь по указанному _id не найден");
       }
       res.status(200).send(user);
     })
@@ -39,7 +39,9 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
-        throw new BadRequestError("Переданы некорректные данные");
+        throw new BadRequestError(
+          "Переданы некорректные данные при создании пользователя"
+        );
       } else {
         next(err);
       }
@@ -47,14 +49,25 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const updateUser = (req: Request, res: Response, next: NextFunction) => {
-  Users.findByIdAndUpdate((req as any).user._id, req.body, { new: true })
+  Users.findByIdAndUpdate((req as any).user._id, req.body.name, {
+    new: true,
+    runValidators: true,
+  })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError("Пользователь не найден");
+        throw new NotFoundError("Пользователь с указанным _id не найден");
       }
       res.status(200).send(user);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        throw new BadRequestError(
+          "Переданы некорректные данные при обновлении профиля"
+        );
+      } else {
+        next(err);
+      }
+    });
 };
 
 export const updateAvatar = (
@@ -62,12 +75,21 @@ export const updateAvatar = (
   res: Response,
   next: NextFunction
 ) => {
-  Users.findByIdAndUpdate(req.params.userId, req.body, { new: true })
+  Users.findByIdAndUpdate(req.params.userId, req.body, {
+    new: true,
+    runValidators: true,
+  })
     .then((user) => {
       if (!user) {
         throw new NotFoundError("Пользователь не найден");
       }
       res.status(200).send(user);
     })
-    .catch(next);
+    .catch((err) => {
+      if (err.name === "ValidationError") {
+        throw new BadRequestError("Переданы некорректные данные");
+      } else {
+        next(err);
+      }
+    });
 };

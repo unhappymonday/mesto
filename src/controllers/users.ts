@@ -1,5 +1,5 @@
-import { Request, Response } from 'express';
-import Users from '../models/users';
+import { Request, Response, NextFunction } from "express";
+import Users from "../models/users";
 
 export const getAllUsers = (req: Request, res: Response) => {
   Users.find({})
@@ -7,38 +7,36 @@ export const getAllUsers = (req: Request, res: Response) => {
     .catch((err) => res.status(500).send(err));
 };
 
-export const getUserById = (req: Request, res: Response) => {
-  Users.findById(req.params._id)
+export const getUserById = (
+  req: Request,
+  res: Response,
+  _next: NextFunction
+) => {
+  Users.findById(req.params.userId)
     .then((user) => res.status(200).send(user))
     .catch((err) => res.status(500).send(err));
 };
 
 export const createUser = (req: Request, res: Response) => {
   Users.create(req.body)
-    .then((user) => res.status(200).send({
-      name: user.name,
-      about: user.about,
-      avatar: user.avatar,
-    }))
+    .then((user) =>
+      res.status(200).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+      })
+    )
     .catch((err) => res.status(500).send(err));
 };
 
 export const updateUser = (req: Request, res: Response) => {
-  Users.findByIdAndUpdate(req.params._id, req.body, { new: true, runValidators: true })
-    .then((user) => res.status(200).send({
-      name: user?.name,
-      about: user?.about,
-      avatar: user?.avatar,
-    }))
+  Users.findByIdAndUpdate((req as any).user._id, req.body, { new: true })
+    .then((user) => res.status(200).send(user))
     .catch((err) => res.status(500).send(err));
 };
 
 export const updateAvatar = (req: Request, res: Response) => {
-  Users.findByIdAndUpdate(req.params._id, req.body, { new: true, runValidators: true })
-    .then((user) => res.status(200).send({
-      name: user?.name,
-      about: user?.about,
-      avatar: user?.avatar,
-    }))
+  Users.findByIdAndUpdate(req.params.userId, req.body, { new: true })
+    .then((user) => res.status(200).send(user))
     .catch((err) => res.status(500).send(err));
 };

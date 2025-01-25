@@ -2,6 +2,7 @@ import express, { Request, Response, NextFunction } from "express";
 import mongoose from "mongoose";
 import userRouter from "./routes/users";
 import cardRouter from "./routes/cards";
+import errorHandler from "./middleware/error-handler";
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -20,5 +21,7 @@ app.use((req: Request, _res: Response, next: NextFunction) => {
 });
 app.use("/users", userRouter);
 app.use("/cards", cardRouter);
+
+app.use(errorHandler);
 
 app.listen(PORT);

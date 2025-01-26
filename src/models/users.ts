@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-interface IUser {
+export interface IUser {
   name: string;
   about: string;
   avatar: string;
@@ -9,14 +9,14 @@ interface IUser {
 const userSchema = new mongoose.Schema<IUser>({
   name: {
     type: String,
-    minlength: [2, "Минимальная длина должна составлять не менее 2 символов"],
-    maxlength: [30, "Максимальная длина не должна превышать 30 символов"],
+    minlength: 2,
+    maxlength: 30,
     required: [true, "Поле должно быть заполнено"],
   },
   about: {
     type: String,
-    minlength: [2, "Минимальная длина должна составлять не менее 2 символов"],
-    maxlength: [200, "Максимальная длина не должна превышать 200 символов"],
+    minlength: 2,
+    maxlength: 200,
     required: [true, "Поле должно быть заполнено"],
   },
   avatar: {

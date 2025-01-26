@@ -49,7 +49,7 @@ export const createUser = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const updateUser = (req: Request, res: Response, next: NextFunction) => {
-  Users.findByIdAndUpdate((req as any).user._id, req.body.name, {
+  Users.findByIdAndUpdate((req as any).user._id, req.body, {
     new: true,
     runValidators: true,
   })
@@ -57,7 +57,11 @@ export const updateUser = (req: Request, res: Response, next: NextFunction) => {
       if (!user) {
         throw new NotFoundError("Пользователь с указанным _id не найден");
       }
-      res.status(200).send(user);
+      res.status(200).send({
+        name: user.name,
+        about: user.about,
+        avatar: user.avatar,
+      });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {

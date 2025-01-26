@@ -84,10 +84,15 @@ export const updateAvatar = (
     runValidators: true,
   })
     .then((user) => {
-      if (!user) {
+      const { avatar } = req.body;
+      if (!avatar) {
         throw new NotFoundError("Пользователь не найден");
       }
-      res.status(200).send(user);
+      const avatarUrl = avatar;
+      res.status(200).send({
+        message: "Аватар обновлен",
+        avatar: avatarUrl,
+      });
     })
     .catch((err) => {
       if (err.name === "ValidationError") {
